@@ -20,6 +20,6 @@ def print_result(results_list):
     for client in results_list:
         print(client["ip"] + "\t\t" + client["mac"])
 
-options = get_argments()
+
 scan_result = scan(sys.argv[1])
 print_result(scan_result)
