@@ -13,9 +13,10 @@ def scan(ip):
         client_dict = {"ip": element[1].psrc, "mac": element[1].hwsrc}
         client_list.append(client_dict)
     return client_list
-    
+
 def spoof(ip):
-    pkt = send(ARP(op=ARP.who_has, psrc="192.168.5.51", pdst=ip))
+    arp = ARP(op=ARP.who_has, psrc="192.168.5.51", pdst=ip)
+    pkt = send(arp)
     x = sniff(filter="arp", count=10, timeout=2)
     print (x.summary())
     print ("done")
