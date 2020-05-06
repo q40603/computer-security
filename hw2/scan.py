@@ -1,4 +1,4 @@
-from scapy.all import all
+from scapy.all import *
 import sys
 
 
