@@ -15,6 +15,7 @@ def process_packet(packet):
     """
     # convert netfilter queue packet to scapy packet
     scapy_packet = IP(packet.get_payload())
+    print(scapy_packet)
     if scapy_packet.haslayer(DNSRR):
         # if the packet is a DNS Resource Record (DNS reply)
         # modify the packet
