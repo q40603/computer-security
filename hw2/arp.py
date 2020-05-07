@@ -133,8 +133,9 @@ def middle_man():
 
 def show_dns_pkt(packet):
 	if IP in packet and packet.haslayer(DNS):
-		dns = packet.getlayer(DNS)
-		print(dns)
+		if packet.haslayer(Raw):
+			dns = packet[Raw].load
+			print(dns)
 
 def DNS_inter():
 	sniff(count=0, prn = show_dns_pkt, filter="port 53")
