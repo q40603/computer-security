@@ -36,7 +36,7 @@ def arp():
 
 	scan_net(attacker_ip)
 
-	stream = os.popen('arp -a')
+	stream = os.popen('arp -n | grep -v incomplete')
 
 	vip = []
 	vmac = []
