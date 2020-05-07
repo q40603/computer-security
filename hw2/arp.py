@@ -3,11 +3,38 @@ import re
 import time
 from scapy.all import *
 from uuid import getnode
+import subprocess
+
+def attacker():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    IP = ""
+    try:
+        s.connect(('8.8.8.8', 1))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+
+ 	mac = getnode()
+	mac = ':'.join(("%012X" % mac)[i:i+2] for i in range(0, 12, 2))   
+
+	return IP, mac
+
+def scan_net(ip):
+	prefix_ip = ".".join(ip.split(".")[:3])
+	for i in range(255):
+		try_ip = prefix_ip+".{}".format(i)
+		subprocess.popen("sudo arp -d {} > /dev/null 2>&1".format(try_ip))
+		subprocess.popen("ping -c 5 {} > /dev/null 2>&1 &".format(try_ip))
+
+
 
 
 def arp():
-	mac = getnode()
-	attacker_mac = ':'.join(("%012X" % mac)[i:i+2] for i in range(0, 12, 2))
+	attacker_ip, attacker_mac = attacker()
+
+	scan_net(attacker_ip)
 
 	stream = os.popen('arp -a')
 
