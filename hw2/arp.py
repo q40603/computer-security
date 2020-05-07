@@ -25,8 +25,8 @@ def scan_net(ip):
 	prefix_ip = ".".join(ip.split(".")[:3])
 	for i in range(255):
 		try_ip = prefix_ip+".{}".format(i)
-		subprocess.popen("sudo arp -d {} > /dev/null 2>&1".format(try_ip))
-		subprocess.popen("ping -c 5 {} > /dev/null 2>&1 &".format(try_ip))
+		os.system("sudo arp -d {} > /dev/null 2>&1".format(try_ip))
+		os.system("ping -c 5 {} > /dev/null 2>&1 &".format(try_ip))
 
 
 
