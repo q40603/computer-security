@@ -25,7 +25,9 @@ def ap(vip,vmac):
 	c = 0
 	for i in vip:
 		if(i.endswith(".1")):
-			return vip[c], vmac[c]
+			ip = vip[c]; mac = vmac[c]
+			del vip[c]; del vmac[c]
+			return ip, mac
 		c += 1
 	return "",""
 
@@ -46,7 +48,7 @@ def arp():
 
 	scan_net(attacker_ip)
 
-	stream = os.popen('arp -n | grep -v incomplete')
+	stream = os.popen('arp -a | grep -v incomplete')
 
 	vip = []
 	vmac = []
@@ -61,6 +63,7 @@ def arp():
 
 	ap_ip, ap_mac = ap(vip,vmac)
 	print(ap_ip,ap_mac)
+
 
 	p = []
 	# for i in range(len(vip)):
