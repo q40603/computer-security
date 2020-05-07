@@ -36,7 +36,7 @@ def ap(vip,vmac):
 
 def scan_net(ip):
 
-	subprocess.run("sudo ip -s -s neigh flush all",shell=True)
+	subprocess.run("sudo ip -s -s neigh flush all > /dev/null 2>&1",shell=True)
 	prefix_ip = ".".join(ip.split(".")[:3])
 	for i in range(255):
 		try_ip = prefix_ip+".{}".format(i)
