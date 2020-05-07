@@ -130,10 +130,17 @@ def middle_man():
 	# result.show()
 	sniff(count=0, prn = show_http_pkt, filter="port 80")
 
+
+def show_dns_pkt(packet):
+	if IP in packet and packet.haslayer(DNS):
+		dns = pkt.getlayer(DNS)
+		print(dns)
+
 def DNS_inter():
-	sniff(count=0, prn = show_http_pkt, filter="port 53")
+	sniff(count=0, prn = show_dns_pkt, filter="port 53")
 
 forwarding(1)
 arp()
-middle_man()
+DNS_inter()
+#middle_man()
 
