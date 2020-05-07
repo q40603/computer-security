@@ -60,7 +60,8 @@ def arp():
 		vip.append(line[1])
 		vmac.append(line[3])
 		lines = stream.readline()
-
+	
+	print(vip,vmac)
 	ap_ip, ap_mac = ap(vip,vmac)
 	print(ap_ip,ap_mac)
 
