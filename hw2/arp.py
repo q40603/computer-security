@@ -62,7 +62,7 @@ def scan_net(ip):
 
 
 	print("\nscan network completed.")
-	print("="*20)
+	print("="*23)
 
 	return vip,vmac
 
@@ -91,7 +91,7 @@ def arp():
 			time.sleep(0.1)
 
 	print("arp spoffing completed.")
-	print("="*20)
+	print("="*23)
 	
 
 # spoof_vic_pkt = Ether(src=attacker_mac,dst=vic_mac)/ARP(psrc=ap_ip, pdst=vic_ip,hwsrc=attacker_mac, op=2)	
