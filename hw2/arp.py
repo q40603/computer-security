@@ -7,6 +7,8 @@ from uuid import getnode
 import subprocess
 from scapy.layers.http import HTTPRequest
 
+TARGET_WEBSITE = '140.113.207.246'
+
 def forwarding(open):
     os.system('sudo sysctl -w net.ipv4.ip_forward={} > /dev/null 2>&1'.format(str(open)))
 
