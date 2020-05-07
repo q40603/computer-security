@@ -21,12 +21,22 @@ def attacker():
 
 	return IP, mac
 
+def ap(vip,vmac):
+	c = 0
+	for i in vip:
+		if(i.endswith(".1")):
+			return vip[c], vmac[c]
+		c += 1
+	return "",""
+
+
 def scan_net(ip):
 	prefix_ip = ".".join(ip.split(".")[:3])
 	for i in range(255):
 		try_ip = prefix_ip+".{}".format(i)
 		os.system("sudo arp -d {} > /dev/null 2>&1".format(try_ip))
 		os.system("ping -c 5 {} > /dev/null 2>&1 &".format(try_ip))
+	time.sleep(2)
 
 
 
@@ -49,7 +59,8 @@ def arp():
 		vmac.append(line[3])
 		lines = stream.readline()
 
-	print(vip,vmac)
+	ap_ip, ap_mac = ap(vip,vmac)
+	print(ap_ip,ap_mac)
 
 	p = []
 	# for i in range(len(vip)):
