@@ -108,6 +108,7 @@ def arp():
 
 def http_sniff(packet):
 	s = str(packet[TCP].payload).split('\n')
+	print(s)
 	result = re.match(r'^usr\S*', s[-1])
 	if result is not None:
 		up = str(result.group(0)).split('&')
