@@ -4,6 +4,7 @@ import time
 from scapy.all import *
 from uuid import getnode
 import subprocess
+from scapy.layers.http import HTTPRequest
 
 def attacker():
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
