@@ -133,7 +133,7 @@ def middle_man():
 
 def show_dns_pkt(packet):
 	if IP in packet and packet.haslayer(DNS):
-		dns = pkt.getlayer(DNS)
+		dns = packet.getlayer(DNS)
 		print(dns)
 
 def DNS_inter():
