@@ -6,17 +6,17 @@ from uuid import getnode
 import subprocess
 
 def attacker():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    IP = ""
-    try:
-        s.connect(('8.8.8.8', 1))
-        IP = s.getsockname()[0]
-    except:
-        IP = '127.0.0.1'
-    finally:
-        s.close()
+	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	IP = ""
+	try:
+		s.connect(('8.8.8.8', 1))
+		IP = s.getsockname()[0]
+	except:
+		IP = '127.0.0.1'
+	finally:
+		s.close()
 
- 	mac = getnode()
+	mac = getnode()
 	mac = ':'.join(("%012X" % mac)[i:i+2] for i in range(0, 12, 2))   
 
 	return IP, mac
