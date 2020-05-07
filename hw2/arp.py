@@ -140,7 +140,5 @@ def DNS_inter():
 
 forwarding(1)
 arp()
-DNS_inter()
-
-#middle_man()
+middle_man()
 
