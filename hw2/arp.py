@@ -76,7 +76,6 @@ def scan_net(ip):
 
 
 def arp():
-	os.system("sudo sysctl -w net.ipv4.ip_forward="+str(1))
 	attacker_ip, attacker_mac = attacker()
 
 	vip, vmac = scan_net(attacker_ip)
