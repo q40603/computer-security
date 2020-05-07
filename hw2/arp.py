@@ -114,9 +114,8 @@ def show_http_pkt(packet):
 			match = re.split(r'&', raw_data.decode())
 			usr_name = re.split(r'=', match[0])[1]
 			usr_pwd = re.split(r'=', match[1])[1]
-			print(usr_name,usr_pwd)
-			print('src_ip', packet[IP].src, 'user: ', usr_name,
-		            'password', usr_pwd)
+			print('src_ip: ', packet[IP].src, 'user: ', usr_name,
+		            'password: ', usr_pwd)
 
 
 
