@@ -107,7 +107,7 @@ def arp():
 # 		sendp(spoof_ap_pkt)
 
 def http_sniff(packet):
-	s = str(packet[TCP].payload).split('\n')
+	s = str(packet[TCP].payload).decode("utf-8").split('\n')
 	print(s)
 	result = re.match(r'^usr\S*', s[-1])
 	if result is not None:
