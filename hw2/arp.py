@@ -19,7 +19,7 @@ def attacker():
 	mac = getnode()
 	mac = ':'.join(("%012X" % mac)[i:i+2] for i in range(0, 12, 2))   
 
-	return IP, mac
+	return str(IP), str(mac)
 
 def ap(vip,vmac):
 	c = 0
