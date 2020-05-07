@@ -56,9 +56,9 @@ def scan_net(ip):
 		vmac.append(line[3])
 		lines = stream.readline()
 	
-    sys.stdout.write("{:<20}{:<20}\n".format("IP", "MAC Address"))
-    for i in range(len(vip)):
-        sys.stdout.write("{:<20}{:<20}\n".format(vip[i], vmac[i]))
+	sys.stdout.write("{:<20}{:<20}\n".format("IP", "MAC Address"))
+	for i in range(len(vip)):
+		sys.stdout.write("{:<20}{:<20}\n".format(vip[i], vmac[i]))
 
 
 	print("\nscan network completed.")
